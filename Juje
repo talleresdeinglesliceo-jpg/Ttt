@@ -1,0 +1,595 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+if CoreGui:FindFirstChild("LuxedHUD") then
+    CoreGui.LuxedHUD:Destroy()
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "LuxedHUD"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = CoreGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 240, 0, 272)
+frame.AnchorPoint = Vector2.new(0.5, 0)
+frame.Position = UDim2.new(0.5, 0, 0, 15)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 0.35
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = frame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -30, 0, 25)
+titleLabel.Position = UDim2.new(0, 10, 0, 5)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Text = "⚡ LUXED HUD"
+titleLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
+titleLabel.TextSize = 13
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = frame
+
+local combatLabel = Instance.new("TextLabel")
+combatLabel.Size = UDim2.new(1, -20, 0, 22)
+combatLabel.Position = UDim2.new(0, 10, 0, 32)
+combatLabel.BackgroundTransparency = 1
+combatLabel.Font = Enum.Font.GothamBold
+combatLabel.Text = "⚔️ [ COMBAT & VISUALS ]"
+combatLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
+combatLabel.TextSize = 11
+combatLabel.TextXAlignment = Enum.TextXAlignment.Center
+combatLabel.Parent = frame
+
+local silentContainer = Instance.new("Frame")
+silentContainer.Size = UDim2.new(1, -20, 0, 26)
+silentContainer.Position = UDim2.new(0, 10, 0, 60)
+silentContainer.BackgroundTransparency = 1
+silentContainer.Parent = frame
+
+local silentText = Instance.new("TextLabel")
+silentText.Size = UDim2.new(0, 120, 1, 0)
+silentText.Position = UDim2.new(0, 0, 0, 0)
+silentText.BackgroundTransparency = 1
+silentText.Font = Enum.Font.GothamSemibold
+silentText.Text = "Silent Aim (Camara)"
+silentText.TextColor3 = Color3.fromRGB(255, 255, 255)
+silentText.TextSize = 11
+silentText.TextXAlignment = Enum.TextXAlignment.Left
+silentText.Parent = silentContainer
+
+local toggleSwitch = Instance.new("TextButton")
+toggleSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleSwitch.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+toggleSwitch.AutoButtonColor = false
+toggleSwitch.Text = ""
+toggleSwitch.Parent = silentContainer
+
+local switchCorner = Instance.new("UICorner")
+switchCorner.CornerRadius = UDim.new(1, 0)
+switchCorner.Parent = toggleSwitch
+
+local switchKnob = Instance.new("Frame")
+switchKnob.Size = UDim2.new(0, 16, 0, 16)
+switchKnob.Position = UDim2.new(1, -18, 0.5, -8)
+switchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+switchKnob.Parent = toggleSwitch
+
+local knobCorner = Instance.new("UICorner")
+knobCorner.CornerRadius = UDim.new(1, 0)
+knobCorner.Parent = switchKnob
+
+local balaContainer = Instance.new("Frame")
+balaContainer.Size = UDim2.new(1, -20, 0, 26)
+balaContainer.Position = UDim2.new(0, 10, 0, 90)
+balaContainer.BackgroundTransparency = 1
+balaContainer.Parent = frame
+
+local balaText = Instance.new("TextLabel")
+balaText.Size = UDim2.new(0, 120, 1, 0)
+balaText.Position = UDim2.new(0, 0, 0, 0)
+balaText.BackgroundTransparency = 1
+balaText.Font = Enum.Font.GothamSemibold
+balaText.Text = "Silent Aim (Bala)"
+balaText.TextColor3 = Color3.fromRGB(255, 255, 255)
+balaText.TextSize = 11
+balaText.TextXAlignment = Enum.TextXAlignment.Left
+balaText.Parent = balaContainer
+
+local toggleBalaSwitch = Instance.new("TextButton")
+toggleBalaSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleBalaSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleBalaSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleBalaSwitch.AutoButtonColor = false
+toggleBalaSwitch.Text = ""
+toggleBalaSwitch.Parent = balaContainer
+
+local balaSwitchCorner = Instance.new("UICorner")
+balaSwitchCorner.CornerRadius = UDim.new(1, 0)
+balaSwitchCorner.Parent = toggleBalaSwitch
+
+local balaSwitchKnob = Instance.new("Frame")
+balaSwitchKnob.Size = UDim2.new(0, 16, 0, 16)
+balaSwitchKnob.Position = UDim2.new(0, 2, 0.5, -8)
+balaSwitchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+balaSwitchKnob.Parent = toggleBalaSwitch
+
+local balaKnobCorner = Instance.new("UICorner")
+balaKnobCorner.CornerRadius = UDim.new(1, 0)
+balaKnobCorner.Parent = balaSwitchKnob
+
+local espContainer = Instance.new("Frame")
+espContainer.Size = UDim2.new(1, -20, 0, 26)
+espContainer.Position = UDim2.new(0, 10, 0, 120)
+espContainer.BackgroundTransparency = 1
+espContainer.Parent = frame
+
+local espText = Instance.new("TextLabel")
+espText.Size = UDim2.new(0, 120, 1, 0)
+espText.Position = UDim2.new(0, 0, 0, 0)
+espText.BackgroundTransparency = 1
+espText.Font = Enum.Font.GothamSemibold
+espText.Text = "ESP Box"
+espText.TextColor3 = Color3.fromRGB(255, 255, 255)
+espText.TextSize = 11
+espText.TextXAlignment = Enum.TextXAlignment.Left
+espText.Parent = espContainer
+
+local toggleEspSwitch = Instance.new("TextButton")
+toggleEspSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleEspSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleEspSwitch.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+toggleEspSwitch.AutoButtonColor = false
+toggleEspSwitch.Text = ""
+toggleEspSwitch.Parent = espContainer
+
+local espSwitchCorner = Instance.new("UICorner")
+espSwitchCorner.CornerRadius = UDim.new(1, 0)
+espSwitchCorner.Parent = toggleEspSwitch
+
+local espSwitchKnob = Instance.new("Frame")
+espSwitchKnob.Size = UDim2.new(0, 16, 0, 16)
+espSwitchKnob.Position = UDim2.new(1, -18, 0.5, -8)
+espSwitchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+espSwitchKnob.Parent = toggleEspSwitch
+
+local espKnobCorner = Instance.new("UICorner")
+espKnobCorner.CornerRadius = UDim.new(1, 0)
+espKnobCorner.Parent = espSwitchKnob
+
+local resContainer = Instance.new("Frame")
+resContainer.Size = UDim2.new(1, -20, 0, 26)
+resContainer.Position = UDim2.new(0, 10, 0, 150)
+resContainer.BackgroundTransparency = 1
+resContainer.Parent = frame
+
+local resText = Instance.new("TextLabel")
+resText.Size = UDim2.new(0, 120, 1, 0)
+resText.Position = UDim2.new(0, 0, 0, 0)
+resText.BackgroundTransparency = 1
+resText.Font = Enum.Font.GothamSemibold
+resText.Text = "Pantalla Estirada"
+resText.TextColor3 = Color3.fromRGB(255, 255, 255)
+resText.TextSize = 11
+resText.TextXAlignment = Enum.TextXAlignment.Left
+resText.Parent = resContainer
+
+local toggleResSwitch = Instance.new("TextButton")
+toggleResSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleResSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleResSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleResSwitch.AutoButtonColor = false
+toggleResSwitch.Text = ""
+toggleResSwitch.Parent = resContainer
+
+local resSwitchCorner = Instance.new("UICorner")
+resSwitchCorner.CornerRadius = UDim.new(1, 0)
+resSwitchCorner.Parent = toggleResSwitch
+
+local resSwitchKnob = Instance.new("Frame")
+resSwitchKnob.Size = UDim2.new(0, 16, 0, 16)
+resSwitchKnob.Position = UDim2.new(0, 2, 0.5, -8)
+resSwitchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+resSwitchKnob.Parent = toggleResSwitch
+
+local resKnobCorner = Instance.new("UICorner")
+resKnobCorner.CornerRadius = UDim.new(1, 0)
+resKnobCorner.Parent = resSwitchKnob
+
+local playerLabel = Instance.new("TextLabel")
+playerLabel.Size = UDim2.new(1, -20, 0, 22)
+playerLabel.Position = UDim2.new(0, 10, 0, 180)
+playerLabel.BackgroundTransparency = 1
+playerLabel.Font = Enum.Font.GothamBold
+playerLabel.Text = "👤 [ PLAYER ]"
+playerLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
+playerLabel.TextSize = 11
+playerLabel.TextXAlignment = Enum.TextXAlignment.Center
+playerLabel.Parent = frame
+
+local speedContainer = Instance.new("Frame")
+speedContainer.Size = UDim2.new(1, -20, 0, 26)
+speedContainer.Position = UDim2.new(0, 10, 0, 206)
+speedContainer.BackgroundTransparency = 1
+speedContainer.Parent = frame
+
+local speedText = Instance.new("TextLabel")
+speedText.Size = UDim2.new(0, 120, 1, 0)
+speedText.Position = UDim2.new(0, 0, 0, 0)
+speedText.BackgroundTransparency = 1
+speedText.Font = Enum.Font.GothamSemibold
+speedText.Text = "Velocidad (24)"
+speedText.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedText.TextSize = 11
+speedText.TextXAlignment = Enum.TextXAlignment.Left
+speedText.Parent = speedContainer
+
+local toggleSpeedSwitch = Instance.new("TextButton")
+toggleSpeedSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleSpeedSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleSpeedSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleSpeedSwitch.AutoButtonColor = false
+toggleSpeedSwitch.Text = ""
+toggleSpeedSwitch.Parent = speedContainer
+
+local speedSwitchCorner = Instance.new("UICorner")
+speedSwitchCorner.CornerRadius = UDim.new(1, 0)
+speedSwitchCorner.Parent = toggleSpeedSwitch
+
+local speedSwitchKnob = Instance.new("Frame")
+speedSwitchKnob.Size = UDim2.new(0, 16, 0, 16)
+speedSwitchKnob.Position = UDim2.new(0, 2, 0.5, -8)
+speedSwitchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+speedSwitchKnob.Parent = toggleSpeedSwitch
+
+local speedKnobCorner = Instance.new("UICorner")
+speedKnobCorner.CornerRadius = UDim.new(1, 0)
+speedKnobCorner.Parent = speedSwitchKnob
+
+local jumpContainer = Instance.new("Frame")
+jumpContainer.Size = UDim2.new(1, -20, 0, 26)
+jumpContainer.Position = UDim2.new(0, 10, 0, 236)
+jumpContainer.BackgroundTransparency = 1
+jumpContainer.Parent = frame
+
+local jumpText = Instance.new("TextLabel")
+jumpText.Size = UDim2.new(0, 120, 1, 0)
+jumpText.Position = UDim2.new(0, 0, 0, 0)
+jumpText.BackgroundTransparency = 1
+jumpText.Font = Enum.Font.GothamSemibold
+jumpText.Text = "Salto Infinito"
+jumpText.TextColor3 = Color3.fromRGB(255, 255, 255)
+jumpText.TextSize = 11
+jumpText.TextXAlignment = Enum.TextXAlignment.Left
+jumpContainer.Parent = frame
+
+local toggleJumpSwitch = Instance.new("TextButton")
+toggleJumpSwitch.Size = UDim2.new(0, 40, 0, 20)
+toggleJumpSwitch.Position = UDim2.new(1, -40, 0.5, -10)
+toggleJumpSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleJumpSwitch.AutoButtonColor = false
+toggleJumpSwitch.Text = ""
+toggleJumpSwitch.Parent = jumpContainer
+
+local jumpSwitchCorner = Instance.new("UICorner")
+jumpSwitchCorner.CornerRadius = UDim.new(1, 0)
+jumpSwitchCorner.Parent = toggleJumpSwitch
+
+local jumpSwitchKnob = Instance.new("Frame")
+jumpSwitchKnob.Size = UDim2.new(0, 16, 0, 16)
+jumpSwitchKnob.Position = UDim2.new(0, 2, 0.5, -8)
+jumpSwitchKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+jumpSwitchKnob.Parent = toggleJumpSwitch
+
+local jumpKnobCorner = Instance.new("UICorner")
+jumpKnobCorner.CornerRadius = UDim.new(1, 0)
+jumpKnobCorner.Parent = jumpSwitchKnob
+
+local silentActive = true
+local balaActive = false
+local espActive = true
+local resActive = false
+local speedActive = false
+local jumpActive = false
+
+toggleSwitch.MouseButton1Click:Connect(function()
+    silentActive = not silentActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if silentActive then
+        TweenService:Create(toggleSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(switchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(switchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+toggleBalaSwitch.MouseButton1Click:Connect(function()
+    balaActive = not balaActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if balaActive then
+        TweenService:Create(toggleBalaSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(balaSwitchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleBalaSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(balaSwitchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+toggleEspSwitch.MouseButton1Click:Connect(function()
+    espActive = not espActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if espActive then
+        TweenService:Create(toggleEspSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(espSwitchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleEspSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(espSwitchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+toggleResSwitch.MouseButton1Click:Connect(function()
+    resActive = not resActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if resActive then
+        TweenService:Create(toggleResSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(resSwitchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleResSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(resSwitchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+toggleSpeedSwitch.MouseButton1Click:Connect(function()
+    speedActive = not speedActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if speedActive then
+        TweenService:Create(toggleSpeedSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(speedSwitchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleSpeedSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(speedSwitchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+toggleJumpSwitch.MouseButton1Click:Connect(function()
+    jumpActive = not jumpActive
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    if jumpActive then
+        TweenService:Create(toggleJumpSwitch, info, {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        TweenService:Create(jumpSwitchKnob, info, {Position = UDim2.new(1, -18, 0.5, -8)}):Play()
+    else
+        TweenService:Create(toggleJumpSwitch, info, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        TweenService:Create(jumpSwitchKnob, info, {Position = UDim2.new(0, 2, 0.5, -8)}):Play()
+    end
+end)
+
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Size = UDim2.new(0, 24, 0, 24)
+toggleBtn.Position = UDim2.new(1, -28, 0, 5)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+toggleBtn.BackgroundTransparency = 0.3
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.Text = "-"
+toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleBtn.TextSize = 14
+toggleBtn.Parent = frame
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = toggleBtn
+
+local isMinimized = false
+local dragging, dragInput, dragStart, startPos
+
+toggleBtn.InputBegan:Connect(function(input)
+    if isMinimized and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+toggleBtn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging and isMinimized then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+toggleBtn.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    local info = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    
+    if isMinimized then
+        combatLabel.Visible = false
+        silentContainer.Visible = false
+        balaContainer.Visible = false
+        espContainer.Visible = false
+        resContainer.Visible = false
+        playerLabel.Visible = false
+        speedContainer.Visible = false
+        jumpContainer.Visible = false
+        titleLabel.Visible = false
+        
+        TweenService:Create(frame, info, {Size = UDim2.new(0, 50, 0, 50)}):Play()
+        toggleBtn.Text = "+"
+        TweenService:Create(toggleBtn, info, {Size = UDim2.new(1, 0, 1, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 0.1}):Play()
+    else
+        TweenService:Create(frame, info, {Size = UDim2.new(0, 240, 0, 272)}):Play()
+        toggleBtn.Text = "-"
+        TweenService:Create(toggleBtn, info, {Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(1, -28, 0, 5), BackgroundTransparency = 0.3}):Play()
+        
+        task.wait(0.15)
+        titleLabel.Visible = true
+        combatLabel.Visible = true
+        silentContainer.Visible = true
+        balaContainer.Visible = true
+        espContainer.Visible = true
+        resContainer.Visible = true
+        playerLabel.Visible = true
+        speedContainer.Visible = true
+        jumpContainer.Visible = true
+    end
+end)
+
+local function isTeamMate(player)
+    if player.Team and LocalPlayer.Team and player.Team == LocalPlayer.Team then
+        return true
+    end
+    return false
+end
+
+local function getClosestTarget()
+    local closestTarget = nil
+    local shortestDistance = math.huge
+    local mousePos = UserInputService:GetMouseLocation()
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and not isTeamMate(player) and player.Character then
+            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+            local torso = player.Character:FindFirstChild("HumanoidRootPart") 
+                       or player.Character:FindFirstChild("UpperTorso") 
+                       or player.Character:FindFirstChild("LowerTorso")
+            
+            if humanoid and humanoid.Health > 0 and torso then
+                local screenPos, onScreen = Camera:WorldToViewportPoint(torso.Position)
+                if onScreen then
+                    local distance = (Vector2.new(screenPos.X, screenPos.Y) - mousePos).Magnitude
+                    if distance < shortestDistance then
+                        shortestDistance = distance
+                        closestTarget = torso
+                    end
+                end
+            end
+        end
+    end
+    
+    return closestTarget
+end
+
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
+local oldNamecall = mt.__namecall
+
+mt.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+    
+    if balaActive and (method == "FireServer" or method == "InvokeServer") then
+        local target = getClosestTarget()
+        if target then
+            for i, v in ipairs(args) do
+                if typeof(v) == "Vector3" then
+                    args[i] = target.Position
+                elseif typeof(v) == "CFrame" then
+                    args[i] = CFrame.new(target.Position)
+                end
+            end
+        end
+    end
+    
+    return oldNamecall(self, unpack(args))
+end)
+setreadonly(mt, true)
+
+local espCache = {}
+
+local function removeEsp(player)
+    if espCache[player] then
+        for _, drawing in pairs(espCache[player]) do
+            drawing:Remove()
+        end
+        espCache[player] = nil
+    end
+end
+
+getgenv().Resolution = {
+    [".gg/scripters"] = 0.65
+}
+
+RunService.RenderStepped:Connect(function()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            if espActive and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid.Health > 0 and not isTeamMate(player) then
+                local character = player.Character
+                local rootPart = character.HumanoidRootPart
+                
+                if not espCache[player] then
+                    local box = Drawing.new("Square")
+                    box.Visible = false
+                    box.Color = Color3.fromRGB(0, 150, 255)
+                    box.Thickness = 1.5
+                    box.Filled = false
+                    espCache[player] = {Box = box}
+                end
+                
+                local box = espCache[player].Box
+                local vector, onScreen = Camera:WorldToViewportPoint(rootPart.Position)
+                
+                if onScreen then
+                    local size = Vector2.new(2000 / vector.Z, 3000 / vector.Z)
+                    box.Size = size
+                    box.Position = Vector2.new(vector.X - size.X / 2, vector.Y - size.Y / 2)
+                    box.Visible = true
+                else
+                    box.Visible = false
+                end
+            else
+                if espCache[player] and espCache[player].Box then
+                    espCache[player].Box.Visible = false
+                end
+            end
+        end
+    end
+
+    if silentActive then
+        local target = getClosestTarget()
+        if target and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
+            pcall(function()
+                Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position)
+            end)
+        end
+    end
+
+    if resActive then
+        Camera.CFrame = Camera.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().Resolution[".gg/scripters"], 0, 0, 0, 1)
+    end
+
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if speedActive then
+            humanoid.WalkSpeed = 24
+        end
+        if jumpActive and UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    removeEsp(player)
+end)
